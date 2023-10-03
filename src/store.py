@@ -37,4 +37,5 @@ class Store:
         for product in shopping_list:
             (name, quantity) = product
             order_total += name.buy(quantity)
+            name.set_quantity(name.get_quantity())
         return order_total
