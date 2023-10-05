@@ -13,6 +13,13 @@ class NegativeNumber(Exception):
     pass
 
 
+class OverMaximumPurchase(Exception):
+    """
+    Raise when an order is attempted with quantity larger than the given maximum.
+    Mainly use for Limited Product class
+    """
+
+
 # ---Main Class---
 class Product:
     """
@@ -56,6 +63,46 @@ class Product:
 
     def show(self) -> str:
         return "{}, Price: ${}, Quantity: {}".format(self.name, self.price, self.quantity)
+
+    def buy(self, quantity) -> float:
+        if quantity > self.quantity:
+            raise NegativeNumber()
+        else:
+            total = quantity * self.price
+            self.quantity -= quantity
+            return total
+
+
+# ---Sub class---
+class NonStockedProduct(Product):
+    """
+    Some products in the store are not physical, so we don’t need to keep track of their quantity.
+    For example - a Microsoft Windows license, McAfee Anti Virus software,...
+    On these products, the quantity should be set to zero and always stay that way.
+    """
+
+    def __init__(self, name: str, price: float, quantity: int = 0) -> None:
+        super().__init__(name, price, quantity)
+        self.default_quantity = quantity
+
+    def show(self) -> str:
+        return "{}, Price: ${}".format(self.name, self.price)
+
+
+class LimitedProduct(Product):
+    """
+    Some products can only be purchased X times in an order.
+    For example - a shipping fee can only be added once.
+    If an order is attempted with quantity larger than the maximum one, it should be refused with an exception.
+    """
+
+    def __init__(self, name: str, price: float, quantity: int, maximum: int) -> None:
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def show(self) -> str:
+        return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer".\
+            format(self.name, self.price, self.quantity, self.maximum)
 
     def buy(self, quantity) -> float:
         if quantity > self.quantity:
