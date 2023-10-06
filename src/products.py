@@ -1,4 +1,7 @@
 # ---Custom Exception Class---
+import promotions
+
+
 class EmptyName(Exception):
     """
     Raise when product name is empty with no string, space will count as no string.
@@ -41,6 +44,7 @@ class Product:
             self.price = price
             self.quantity = quantity
             self.active = True
+            self.promotion = None
 
     def get_quantity(self) -> int:
         return self.quantity
@@ -49,6 +53,12 @@ class Product:
         self.quantity = quantity
         if self.quantity == 0:
             self.deactive()
+
+    def get_promotion(self) -> str:
+        return self.promotion.do_promotion()
+
+    def set_promotion(self, promotion):
+        self.promotion = promotion
 
     def is_active(self) -> bool:
         if self.active:
@@ -62,11 +72,20 @@ class Product:
         self.active = False
 
     def show(self) -> str:
-        return "{}, Price: ${}, Quantity: {}".format(self.name, self.price, self.quantity)
+        if self.promotion is None:
+            return "{}, Price: ${}, Quantity: {}, Promotion: {}"\
+                .format(self.name, self.price, self.quantity, self.promotion)
+        else:
+            return "{}, Price: ${}, Quantity: {}, Promotion: {}, Discount" \
+                .format(self.name, self.price, self.quantity, self.promotion)
 
     def buy(self, quantity) -> float:
         if quantity > self.quantity:
             raise NegativeNumber()
+        elif self.promotion is not None:
+            total = quantity * self.price
+            self.quantity -= quantity
+            return total
         else:
             total = quantity * self.price
             self.quantity -= quantity
@@ -101,7 +120,7 @@ class LimitedProduct(Product):
         self.maximum = maximum
 
     def show(self) -> str:
-        return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer".\
+        return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer". \
             format(self.name, self.price, self.quantity, self.maximum)
 
     def buy(self, quantity) -> float:

@@ -63,4 +63,3 @@ def test_buy_too_much():
     product = Product("MacBook Air M2", price=10, quantity=100)
     with pytest.raises(NegativeNumber):
         product.buy(101)
-
