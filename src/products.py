@@ -73,11 +73,11 @@ class Product:
 
     def show(self) -> str:
         if self.promotion is None:
-            return "{}, Price: ${}, Quantity: {}, Promotion: {}"\
-                .format(self.name, self.price, self.quantity, self.promotion)
+            return "{}, Price: ${}, Quantity: {}"\
+                .format(self.name, self.price, self.quantity)
         else:
-            return "{}, Price: ${}, Quantity: {}, Promotion: {}, Discount" \
-                .format(self.name, self.price, self.quantity, self.promotion)
+            return "{}, Price: ${}, Quantity: {}, Promotion: {}" \
+                .format(self.name, self.price, self.quantity, self.promotion.message)
 
     def buy(self, quantity) -> float:
         if quantity > self.quantity:
