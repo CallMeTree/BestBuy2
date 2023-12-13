@@ -1,3 +1,4 @@
+
 from abc import ABC, abstractmethod
 
 
@@ -17,6 +18,8 @@ class SecondHalfPrice(Promotion):
     def apply_promotion(self, price, quantity):
         if quantity >= 2:
             return (price * quantity-1) - (price/2)
+        else:
+            return quantity * price
 
 
 class ThirdOneFree(Promotion):
@@ -26,6 +29,8 @@ class ThirdOneFree(Promotion):
     def apply_promotion(self, price, quantity):
         if quantity >= 3:
             return price * (quantity - 1)
+        else:
+            return quantity * price
 
 
 class PercentDiscount(Promotion):

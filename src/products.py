@@ -74,7 +74,7 @@ class Product:
     def show(self) -> str:
         if self.promotion is None:
             return "{}, Price: ${}, Quantity: {}"\
-                .format(self.name, self.price, self.quantity)
+                .format(self.name, self.price, self.get_quantity())
         else:
             return "{}, Price: ${}, Quantity: {}, Promotion: {}" \
                 .format(self.name, self.price, self.quantity, self.promotion.message)
@@ -83,9 +83,8 @@ class Product:
         if quantity > self.quantity:
             raise NegativeNumber()
         elif self.promotion is not None:
-            total = quantity * self.price
             self.quantity -= quantity
-            return total
+            return self.promotion.apply_promotion(self.price, quantity)
         else:
             total = quantity * self.price
             self.quantity -= quantity
@@ -105,7 +104,18 @@ class NonStockedProduct(Product):
         self.default_quantity = quantity
 
     def show(self) -> str:
-        return "{}, Price: ${}".format(self.name, self.price)
+        if self.promotion is not None:
+            return "{}, Price: ${}, Promotion: {}"\
+                .format(self.name, self.price, self.promotion.message)
+        else:
+            return "{}, Price: ${}"\
+                .format(self.name, self.price)
+
+    def buy(self, quantity) -> float:
+        if self.promotion is not None:
+            return self.promotion.apply_promotion(self.price, quantity)
+        else:
+            return quantity * self.price
 
 
 class LimitedProduct(Product):
@@ -120,8 +130,12 @@ class LimitedProduct(Product):
         self.maximum = maximum
 
     def show(self) -> str:
-        return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer". \
-            format(self.name, self.price, self.quantity, self.maximum)
+        if self.promotion is not None:
+            return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer, Promotion: {}"\
+                .format(self.name, self.price, self.quantity, self.maximum, self.promotion.message)
+        else:
+            return "{}, Price: ${}, Quantity: {}, Maximum: {} per costumer"\
+                .format(self.name, self.price, self.quantity, self.maximum)
 
     def buy(self, quantity) -> float:
         if quantity > self.quantity:
@@ -129,4 +143,4 @@ class LimitedProduct(Product):
         else:
             total = quantity * self.price
             self.quantity -= quantity
-            return total
+        return total

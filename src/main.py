@@ -21,6 +21,7 @@ def main():
     product_list[0].set_promotion(second_half_price)
     product_list[1].set_promotion(third_one_free)
     product_list[3].set_promotion(thirty_percent)
+
     best_buy = store.Store(product_list)
 
     while True:
@@ -34,6 +35,7 @@ def main():
 """)
         option = input("Please choose a number: ")
         print("")
+        # OPTION 1
         if option == "1":
             count = 1
             print("------")
@@ -43,6 +45,7 @@ def main():
                 count += 1
             print("------")
 
+        # OPTION 2
         elif option == "2":
             total_items = 0
             for product in best_buy.get_all_products():
@@ -51,6 +54,7 @@ def main():
             print(f"Total of {total_items} items in store")
             print("---------------------------------------")
 
+        # OPTION 3
         elif option == "3":
             key_loop = True  # This key loop use for exit the coming while loop
             shopping_cart = []
@@ -99,9 +103,11 @@ def main():
                             print("Product add to cart!")
                         except ValueError:
                             print("Please enter valid option!")
-                    best_buy.order(shopping_cart)
+                    print(f"You order total is ${best_buy.order(shopping_cart)}")
                 except products.NegativeNumber:
                     print("Error while making order! Quantity larger than what exists.")
+
+        # OPTION 4
         elif option == "4":
             quit()
         else:
@@ -110,25 +116,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # setup initial stock of inventory
-    # setup initial stock of inventory
-    # product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
-    #                 products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-    #                 products.Product("Google Pixel 7", price=500, quantity=250),
-    #                 products.NonStockedProduct("Windows License", price=125),
-    #                 products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
-    #                 ]
-    #
-    # # Create promotion catalog
-    # second_half_price = promotions.SecondHalfPrice("Second Half price!")
-    # third_one_free = promotions.ThirdOneFree("Third One Free!")
-    # thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
-    #
-    # # Add promotions to products
-    # product_list[0].set_promotion(second_half_price)
-    # product_list[1].set_promotion(third_one_free)
-    # product_list[3].set_promotion(thirty_percent)
-    #
-    # print(product_list[0].show())
+
 
 
